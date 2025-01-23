@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.LockRotation;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -77,6 +78,18 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
+        new JoystickButton(m_driverController, Constants.Controls.lockNorth).whileTrue(
+                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(0))
+        );
+        new JoystickButton(m_driverController, Constants.Controls.lockSouth).whileTrue(
+                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(180))
+        );
+        new JoystickButton(m_driverController, Constants.Controls.lockEast).whileTrue(
+                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(270))
+        );
+        new JoystickButton(m_driverController, Constants.Controls.lockWest).whileTrue(
+                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(90))
+        );
     }
 
     /**

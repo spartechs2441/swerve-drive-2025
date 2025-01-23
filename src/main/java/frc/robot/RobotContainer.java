@@ -36,6 +36,10 @@ public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
+    public double getGyro() {
+        return m_robotDrive.getGyro().getDegrees();
+    }
+
     // The driver's controller
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 

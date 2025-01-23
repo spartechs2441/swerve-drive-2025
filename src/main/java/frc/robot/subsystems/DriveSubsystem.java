@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class DriveSubsystem extends SubsystemBase {
+    private double tare = 0;
     // Create MAXSwerveModules
     private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
@@ -64,7 +65,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     public Rotation2d getGyro() {
         double angle = this.gyro.getYaw().getValueAsDouble();
-        return Rotation2d.fromDegrees(angle);
+        return Rotation2d.fromDegrees(angle - tare);
+    }
+
+    public void tare() {
+        this.tare += getGyro().getDegrees();
     }
 
     @Override

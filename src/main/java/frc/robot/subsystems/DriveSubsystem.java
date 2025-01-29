@@ -4,6 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -14,36 +19,38 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import java.security.Provider;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 public class DriveSubsystem extends SubsystemBase {
-    private double tare = 0;
     // Create MAXSwerveModules
     private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
             DriveConstants.kFrontLeftChassisAngularOffset);
-
     private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
             DriveConstants.kFrontRightChassisAngularOffset);
-
     private final MAXSwerveModule m_rearLeft = new MAXSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
             DriveConstants.kBackLeftChassisAngularOffset);
-
     private final MAXSwerveModule m_rearRight = new MAXSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
             DriveConstants.kBackRightChassisAngularOffset);
-
     // The gyro sensor
     private final Pigeon2 gyro = new Pigeon2(0);
+    private double tare = 0;
     // Odometry class for tracking robot pose
     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
             DriveConstants.kDriveKinematics,
@@ -61,6 +68,63 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem() {
         // Usage reporting for MAXSwerve template
         HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+        // All other subsystem initialization
+        // ...
+
+        // Load the RobotConfig from the GUI settings. You should probably
+        // store this in your Constants file
+        try {
+            RobotConfig config = RobotConfig.fromGUISettings();
+
+            // This exists because intellij gives me the "cannot resolve x"
+            // without giving me the actual place it errors, this is to narrow down errors
+            Supplier<Pose2d> getPose = this::getPose;
+            Consumer<Pose2d> resetPose = this::resetPose;
+            Supplier<ChassisSpeeds> getRobotRelativeSpeeds = this::getRobotRelativeSpeeds;
+            Consumer<ChassisSpeeds> robotDriveRelative = this::robotDriveRelative;
+
+            // Configure AutoBuilder
+            AutoBuilder.configure(
+                    getPose,
+                    resetPose,
+                    getRobotRelativeSpeeds,
+                    robotDriveRelative, // (speeds, feedforwards) -> driveRobotRelative((Object) speeds),
+                    new PPHolonomicDriveController(
+                            new PIDConstants(5.0, 0.0, 0.0),
+                            new PIDConstants(5.0, 0.0, 0.0)
+                    ),
+                    config,
+                    () -> {
+                        var alliance = DriverStation.getAlliance();
+                        if (alliance.isPresent()) {
+                            return alliance.get() == DriverStation.Alliance.Red;
+                        }
+                        return false;
+                    },
+                    this
+            );
+            System.out.println("=== Done configuring ===");
+        } catch (Exception e) {
+            // Handle exception as needed
+            e.printStackTrace(); // DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.printStackTrace());
+        }
+    }
+
+
+    public void robotDriveRelative(ChassisSpeeds speeds) {
+        DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+        drive(0.5, 0, 0, false);
+    }
+
+    private ChassisSpeeds getRobotRelativeSpeeds(double xSpeedDelivered, double ySpeedDelivered, double rotDelivered, boolean fieldRelative) {
+        return fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
+                getGyro())
+                : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState());
     }
 
     public Rotation2d getGyro() {
@@ -90,8 +154,13 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @return The pose.
      */
+
     public Pose2d getPose() {
-        return m_odometry.getPoseMeters();
+        var pose = m_odometry.getPoseMeters();
+        if (pose == null) {
+            throw new RuntimeException("WHY ARE YOU NULL");
+        }
+        return pose;
     }
 
     /**
@@ -99,7 +168,7 @@ public class DriveSubsystem extends SubsystemBase {
      *
      * @param pose The pose to which to set the odometry.
      */
-    public void resetOdometry(Pose2d pose) {
+    public void resetPose(Pose2d pose) {
         m_odometry.resetPosition(
                 getGyro(),
                 new SwerveModulePosition[]{
@@ -126,11 +195,11 @@ public class DriveSubsystem extends SubsystemBase {
         double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
         double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
 
+        var chassisSpeed = getRobotRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, fieldRelative);
+
         var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-                fieldRelative
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                        getGyro())
-                        : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+                chassisSpeed
+        );
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
 

@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -112,8 +113,13 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     public void robotDriveRelative(ChassisSpeeds speeds) {
-        DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
-        drive(0.5, 0, 0, false);
+        var moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        m_frontRight.setDesiredState(moduleStates[0]);
+        m_frontLeft.setDesiredState(moduleStates[1]);
+        m_rearRight.setDesiredState(moduleStates[2]);
+        m_rearLeft.setDesiredState(moduleStates[3]);
+        // drive(0.5, 0, 0, false);
     }
 
     private ChassisSpeeds getRobotRelativeSpeeds(double xSpeedDelivered, double ySpeedDelivered, double rotDelivered, boolean fieldRelative) {

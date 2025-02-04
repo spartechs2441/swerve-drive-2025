@@ -1,20 +1,11 @@
-//This is Limelight Code from the Old Robot
-//Expect Stuff to go wrong
+package frc.robot.subsystems;
 
-package frc.robot.commands;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.DriveSubsystem;
 
-public class LimeLightCmd extends Command {
-    private final XboxController joystick;
+public class LimelightSubsystem extends SubsystemBase {
     NetworkTable llight;
     private NetworkTableEntry tx;
     private NetworkTableEntry ty;
@@ -24,17 +15,13 @@ public class LimeLightCmd extends Command {
     private double y;
     private double area;
     private Long isSomething;
-    private DriveSubsystem m_robotDrive;
 
-    public LimeLightCmd(NetworkTable limeLight, DriveSubsystem subsystem, XboxController joystick) {
+    public LimelightSubsystem(NetworkTable limeLight) {
         llight = limeLight;
-        this.joystick = joystick;
         ta = llight.getEntry("ta"); //area of reflective object
         tx = llight.getEntry("tx"); //displacement on x axis
         ty = llight.getEntry("ty"); //displacement on y axis
         tv = llight.getEntry("tv"); //0 or 1 depending on if there is a reflective object
-        m_robotDrive = subsystem;
-        addRequirements(m_robotDrive);
     }
 
     // simple proportional turning control with Limelight.
@@ -54,7 +41,7 @@ public class LimeLightCmd extends Command {
         double targetingAngularVelocity = tx.getDouble(0.0) * kP;
 
         // convert to radians per second for our drive method
-        targetingAngularVelocity *= DriveConstants.kMaxAngularSpeed;
+        targetingAngularVelocity *= Constants.DriveConstants.kMaxAngularSpeed;
 
         //invert since tx is positive when the target is to the right of the crosshair
         targetingAngularVelocity *= -1.0;
@@ -68,33 +55,17 @@ public class LimeLightCmd extends Command {
     double limelightRangeProportional() {
         double kP = .1;
         double targetingForwardSpeed = ty.getDouble(0.0) * kP;
-        targetingForwardSpeed *= DriveConstants.kMaxSpeedMetersPerSecond;
+        targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
         targetingForwardSpeed *= -1.0;
         return targetingForwardSpeed;
     }
 
 
-    @Override
-    public void initialize() {
-    }
-
-    @Override
-    public void execute() {
-        double ySpeed = -MathUtil.applyDeadband(this.joystick.getRawAxis(Constants.Controls.yMovement), Constants.OIConstants.kDriveDeadband);
-
+    public void drive(double rawAxis, DriveSubsystem robotDrive) {
         final double rot_limelight = limelightAimProportional();
         final double forward_limelight = limelightRangeProportional();
 
-        this.m_robotDrive.drive(forward_limelight, ySpeed, rot_limelight, false);
+        robotDrive.drive(forward_limelight, rawAxis, rot_limelight, false);
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        CommandScheduler.getInstance().cancelAll();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
 }

@@ -35,7 +35,6 @@ public class LockRotation extends Command {
         } else if (difference < 0) {
             difference = Math.min(difference, -MIN_SPEED);
         }
-
         if (difference > 1 || difference < -1) {
             Robot.errorAssert("Calculated rotation cannot be > 1, < -1\nCalculated value: "
                     + difference + " target: " + targetRot.getDegrees() % 360 + " actual: " + m_robotDrive.getGyro().getDegrees() % 360);

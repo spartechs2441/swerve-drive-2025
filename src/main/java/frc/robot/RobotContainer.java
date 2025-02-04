@@ -5,35 +5,25 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.LimeLightCmd;
+import frc.robot.commands.AutoLimelightCmd;
+import frc.robot.commands.LimelightCmd;
 import frc.robot.commands.LockRotation;
 import frc.robot.commands.TareCmd;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.util.List;
+import frc.robot.subsystems.LimelightSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -44,7 +34,7 @@ import java.util.List;
 public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive;
-    public NetworkTable m_limelight;
+    public LimelightSubsystem m_limelight;
 
     public double getGyro() {
         return m_robotDrive.getGyro().getDegrees();
@@ -59,9 +49,12 @@ public class RobotContainer {
      */
     public RobotContainer() {
         m_robotDrive = new DriveSubsystem();
-        m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        var networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+        m_limelight = new LimelightSubsystem(networkTable);
         // Configure the button bindings
         configureButtonBindings();
+
+        NamedCommands.registerCommand("Limelight", new AutoLimelightCmd(m_robotDrive, m_limelight, 0.5));
 
         // Configure default commands
         m_robotDrive.setDefaultCommand(
@@ -108,7 +101,7 @@ public class RobotContainer {
                 new LockRotation(m_robotDrive, Rotation2d.fromDegrees(90))
         );
         new JoystickButton(m_driverController, Constants.Controls.lightTrack).whileTrue(
-                new LimeLightCmd(m_limelight, m_robotDrive, m_driverController)
+                new LimelightCmd(m_limelight, m_robotDrive, m_driverController)
         );
         new JoystickButton(m_driverController, Constants.Controls.tare).whileTrue(
                 new TareCmd(m_robotDrive)

@@ -15,6 +15,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.LimeLightCmd;
 import frc.robot.commands.LockRotation;
 import frc.robot.commands.TareCmd;
 import frc.robot.subsystems.DriveSubsystem;
@@ -41,6 +44,7 @@ import java.util.List;
 public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive;
+    public NetworkTable m_limelight;
 
     public double getGyro() {
         return m_robotDrive.getGyro().getDegrees();
@@ -55,6 +59,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         m_robotDrive = new DriveSubsystem();
+        m_limelight = NetworkTableInstance.getDefault().getTable("limelight");
         // Configure the button bindings
         configureButtonBindings();
 
@@ -101,6 +106,9 @@ public class RobotContainer {
         );
         new JoystickButton(m_driverController, Constants.Controls.lockWest).whileTrue(
                 new LockRotation(m_robotDrive, Rotation2d.fromDegrees(90))
+        );
+        new JoystickButton(m_driverController, Constants.Controls.lightTrack).whileTrue(
+                new LimeLightCmd(m_limelight, m_robotDrive, m_driverController)
         );
         new JoystickButton(m_driverController, Constants.Controls.tare).whileTrue(
                 new TareCmd(m_robotDrive)

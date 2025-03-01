@@ -43,7 +43,7 @@ public class RobotContainer {
     // The driver's controller
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-    private final SendableChooser<Command> autoChooser;
+//    private final SendableChooser<Command> autoChooser;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -70,8 +70,8 @@ public class RobotContainer {
 
 
         System.out.println("=== Chooser ===");
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+//        autoChooser = AutoBuilder.buildAutoChooser();
+//        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
@@ -88,24 +88,25 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
-        new JoystickButton(m_driverController, Constants.Controls.lockNorth).whileTrue(
-                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(0))
-        );
-        new JoystickButton(m_driverController, Constants.Controls.lockSouth).whileTrue(
-                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(180))
-        );
-        new JoystickButton(m_driverController, Constants.Controls.lockEast).whileTrue(
-                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(270))
-        );
-        new JoystickButton(m_driverController, Constants.Controls.lockWest).whileTrue(
-                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(90))
-        );
-        new JoystickButton(m_driverController, Constants.Controls.lightTrack).whileTrue(
-                new LimelightCmd(m_limelight, m_robotDrive, m_driverController)
-        );
-        new JoystickButton(m_driverController, Constants.Controls.tare).whileTrue(
-                new TareCmd(m_robotDrive)
-        );
+
+//        new JoystickButton(m_driverController, Constants.Controls.lockNorth).whileTrue(
+//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(0))
+//        );
+//        new JoystickButton(m_driverController, Constants.Controls.lockSouth).whileTrue(
+//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(180))
+//        );
+//        new JoystickButton(m_driverController, Constants.Controls.lockEast).whileTrue(
+//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(270))
+//        );
+//        new JoystickButton(m_driverController, Constants.Controls.lockWest).whileTrue(
+//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(90))
+//        );
+          new JoystickButton(m_driverController, Constants.Controls.lightTrack).whileTrue(
+                  new LimelightCmd(m_limelight, m_robotDrive, m_driverController)
+          );
+//        new JoystickButton(m_driverController, Constants.Controls.tare).whileTrue(
+//                new TareCmd(m_robotDrive)
+//        );
 
     }
 
@@ -115,6 +116,12 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+//        return autoChooser.getSelected().andThen(new Command() {
+//            @Override
+//            public void initialize() {
+//                System.out.println("Hello end of auto");
+//            }
+//        });
+        return null;
     }
 }

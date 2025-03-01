@@ -14,7 +14,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class LimelightCmd extends Command {
     private final XboxController joystick;
     private final LimelightSubsystem llSub;
-    private DriveSubsystem m_robotDrive;
+    private final DriveSubsystem m_robotDrive;
 
     public LimelightCmd(LimelightSubsystem llSub, DriveSubsystem subsystem, XboxController joystick) {
         this.llSub = llSub;
@@ -29,7 +29,8 @@ public class LimelightCmd extends Command {
 
     @Override
     public void execute() {
-        double ySpeed = -MathUtil.applyDeadband(this.joystick.getRawAxis(Constants.Controls.yMovement), Constants.OIConstants.kDriveDeadband);
+        double ySpeed = -MathUtil.applyDeadband(this.joystick.getRawAxis(Constants.Controls.yMovement),
+                Constants.OIConstants.kDriveDeadband);
 
         llSub.drive(ySpeed, m_robotDrive);
     }

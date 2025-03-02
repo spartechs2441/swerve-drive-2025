@@ -4,25 +4,19 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.AutoLimelightCmd;
-import frc.robot.commands.LimelightCmd;
-import frc.robot.commands.LockRotation;
-import frc.robot.commands.TareCmd;
+import frc.robot.commands.*;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 /*
@@ -34,14 +28,15 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive;
-    public LimelightSubsystem m_limelight;
+    public final LimelightSubsystem m_limelight;
+    private final ElevatorSubsystem eleSub;
 
     public double getGyro() {
         return m_robotDrive.getGyro().getDegrees();
     }
 
     // The driver's controller
-    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
 //    private final SendableChooser<Command> autoChooser;
     /**
@@ -51,6 +46,7 @@ public class RobotContainer {
         m_robotDrive = new DriveSubsystem();
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");
         m_limelight = new LimelightSubsystem(networkTable);
+        eleSub = new ElevatorSubsystem();
         // Configure the button bindings
         configureButtonBindings();
 
@@ -62,9 +58,9 @@ public class RobotContainer {
                 // Turning is controlled by the X axis of the right stick.
                 new RunCommand(
                         () -> m_robotDrive.drive(
-                                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                                -MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
+                                -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
+                                -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
                                 true),
                         m_robotDrive));
 
@@ -84,7 +80,7 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(m_driverController, Button.kR1.value)
+        new JoystickButton(driverController, Button.kR1.value)
                 .whileTrue(new RunCommand(
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
@@ -101,13 +97,19 @@ public class RobotContainer {
 //        new JoystickButton(m_driverController, Constants.Controls.lockWest).whileTrue(
 //                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(90))
 //        );
-          new JoystickButton(m_driverController, Constants.Controls.lightTrack).whileTrue(
-                  new LimelightCmd(m_limelight, m_robotDrive, m_driverController)
+          new JoystickButton(driverController, Constants.Controls.lightTrack).whileTrue(
+                  new LimelightCmd(m_limelight, m_robotDrive, driverController)
           );
 //        new JoystickButton(m_driverController, Constants.Controls.tare).whileTrue(
 //                new TareCmd(m_robotDrive)
 //        );
 
+         new POVButton(driverController, 0)
+                 .onTrue(new ElevatorUpCmd(eleSub))
+                 .onFalse(new ElevatorStopCmd(eleSub));
+        new POVButton(driverController, 180)
+                .onTrue(new ElevatorDownCmd(eleSub))
+                .onFalse(new ElevatorStopCmd(eleSub));
     }
 
         /**

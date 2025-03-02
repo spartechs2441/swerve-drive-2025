@@ -60,6 +60,15 @@ public final class Constants {
         public static final boolean kGyroReversed = false;
     }
 
+    public static final class ElevatorConstants {
+        public static final int canId = 12;
+        public static final int limitSwitchDIo = 0;
+        // Test this when changing the elevator
+        public static final int encoderLimit = 387;
+        public static final int voltage = 3;
+
+    }
+
     public static final class ModuleConstants {
         // The MAXSwerve module can be configured with one of three pinion gears: 12T,
         // 13T, or 14T. This changes the drive speed of the module (a pinion gear with

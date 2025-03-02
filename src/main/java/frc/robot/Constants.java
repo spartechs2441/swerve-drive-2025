@@ -117,7 +117,8 @@ public final class Constants {
         public static final int lockSouth = XboxController.Button.kA.value;
         public static final int lightTrack = XboxController.Button.kRightBumper.value;
         public static final int tare = XboxController.Button.kStart.value;
-        public static final int pist = XboxController.Button.kLeftBumper.value;
+        public static final int pistonOut = XboxController.Button.kA.value;
+        public static final int pistonIn = XboxController.Button.kB.value;
 
         //Controller Controls
         public static final int yMovement = XboxController.Axis.kLeftX.value; //The X and Y Movement are switched

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.*;
+import frc.robot.subsystems.ChuteSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 public class RobotContainer {
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive;
+    private final ChuteSubsystem chuteSub;
     public final LimelightSubsystem m_limelight;
     private final ElevatorSubsystem eleSub;
 
@@ -44,6 +46,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         m_robotDrive = new DriveSubsystem();
+        chuteSub = new ChuteSubsystem();
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");
         m_limelight = new LimelightSubsystem(networkTable);
         eleSub = new ElevatorSubsystem();
@@ -110,6 +113,11 @@ public class RobotContainer {
         new POVButton(driverController, 180)
                 .onTrue(new ElevatorDownCmd(eleSub))
                 .onFalse(new ElevatorStopCmd(eleSub));
+
+        new JoystickButton(driverController, Constants.Controls.pistonOut)
+                .onTrue(new PistonExtendCmd(chuteSub));
+        new JoystickButton(driverController, Constants.Controls.pistonIn)
+                .onTrue(new PistonRetractCmd(chuteSub));
     }
 
         /**

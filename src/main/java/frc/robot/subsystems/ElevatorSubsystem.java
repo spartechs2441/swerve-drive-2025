@@ -25,7 +25,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             elevator.setVoltage(0);
         }
-        System.out.println(elevatorEncoder.getPosition());
     }
     public void elevatorDown() {
         if (elevatorEncoder.getPosition() > -Constants.ElevatorConstants.encoderLimit
@@ -34,7 +33,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             elevator.setVoltage(0);
         }
-        System.out.println(elevatorEncoder.getPosition());
     }
     public void elevatorStop() {
         elevator.setVoltage(0);

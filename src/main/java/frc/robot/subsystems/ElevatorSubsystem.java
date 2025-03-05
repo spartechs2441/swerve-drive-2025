@@ -9,7 +9,6 @@ import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-    // TODO: Add these in constants
     private final SparkMax elevator = new SparkMax(Constants.ElevatorConstants.canId, SparkLowLevel.MotorType.kBrushless);
     private final RelativeEncoder elevatorEncoder;
     public DigitalInput limitSwitch = new DigitalInput(Constants.ElevatorConstants.limitSwitchDIo);
@@ -19,22 +18,46 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void elevatorUp() {
+        safeUp();
+    }
+    public void elevatorDown() {
+        safeDown();
+    }
+    public void elevatorStop() {
+        elevator.setVoltage(0);
+    }
+
+    public void macro(double desired) {
+        final double tolerance = 10;
+        double position = elevatorEncoder.getPosition();
+        if (Math.abs(position - desired) < tolerance) {
+            elevatorStop();
+            return;
+        }
+
+        if (position <= desired) {
+            elevatorUp();
+        } else if (position > desired) {
+            elevatorDown();
+        }
+    }
+
+    private void safeUp() {
         if (elevatorEncoder.getPosition() < Constants.ElevatorConstants.encoderLimit
                 && !limitSwitch.get()) {
             elevator.setVoltage(Constants.ElevatorConstants.voltage);
         } else {
-            elevator.setVoltage(0);
+            elevatorStop();
         }
+        System.out.println(elevatorEncoder.getPosition());
     }
-    public void elevatorDown() {
-        if (elevatorEncoder.getPosition() > -Constants.ElevatorConstants.encoderLimit
-                && !limitSwitch.get()) {
+
+    private void safeDown() {
+        if (elevatorEncoder.getPosition() > -10) {
             elevator.setVoltage(-Constants.ElevatorConstants.voltage);
         } else {
-            elevator.setVoltage(0);
+            elevatorStop();
         }
-    }
-    public void elevatorStop() {
-        elevator.setVoltage(0);
+        System.out.println(elevatorEncoder.getPosition());
     }
 }

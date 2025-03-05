@@ -65,7 +65,7 @@ public final class Constants {
         public static final int limitSwitchDIo = 0;
         // Test this when changing the elevator
         public static final int encoderLimit = 387;
-        public static final int voltage = 3;
+        public static final int voltage = 7;
 
     }
 
@@ -111,14 +111,15 @@ public final class Constants {
     }
 
     public static final class Controls {
-        public static final int lockNorth = XboxController.Button.kY.value;
-        public static final int lockEast = XboxController.Button.kB.value;
-        public static final int lockWest = XboxController.Button.kX.value;
-        public static final int lockSouth = XboxController.Button.kA.value;
+        public static final int l2Macro = XboxController.Button.kA.value;
+        public static final int l3Macro = XboxController.Button.kB.value;
+        public static final int shootMacro = XboxController.Button.kY.value;
+        public static final int aprilTagTrack = XboxController.Button.kX.value;
         public static final int lightTrack = XboxController.Button.kRightBumper.value;
         public static final int tare = XboxController.Button.kStart.value;
         public static final int pistonOut = XboxController.Button.kA.value;
         public static final int pistonIn = XboxController.Button.kB.value;
+        public static final int downMacro = XboxController.Button.kBack.value;
 
         //Controller Controls
         public static final int yMovement = XboxController.Axis.kLeftX.value; //The X and Y Movement are switched

@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.*;
@@ -40,7 +43,7 @@ public class RobotContainer {
     // The driver's controller
     XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-//    private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -54,6 +57,8 @@ public class RobotContainer {
         configureButtonBindings();
 
         NamedCommands.registerCommand("Limelight", new AutoLimelightCmd(m_robotDrive, m_limelight, 0.5));
+        NamedCommands.registerCommand("ElevatorL2", new ElevatorMacroCmd(150, eleSub));
+        NamedCommands.registerCommand("ElevatorL3", new ElevatorMacroCmd(350, eleSub));
 
         // Configure default commands
         m_robotDrive.setDefaultCommand(
@@ -69,8 +74,8 @@ public class RobotContainer {
 
 
         System.out.println("=== Chooser ===");
-//        autoChooser = AutoBuilder.buildAutoChooser();
-//        SmartDashboard.putData("Auto Chooser", autoChooser);
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
@@ -87,29 +92,25 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
+//            new JoystickButton(driverController, Constants.Controls.shootMacro).onTrue(
+//                    new
+//            )
+        new JoystickButton(driverController, Constants.Controls.l2Macro).onTrue(
+                new ElevatorMacroCmd(260, eleSub)
+        );
+        new JoystickButton(driverController, Constants.Controls.l3Macro).onTrue(
+                new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub)
+        );
+        new JoystickButton(driverController, Constants.Controls.downMacro).onTrue(
+                new ElevatorMacroCmd(0, eleSub)
+        );
+        new JoystickButton(driverController, Constants.Controls.aprilTagTrack).whileTrue(
+                new LimelightCmd(m_limelight, m_robotDrive, driverController)
+        );
 
-//        new JoystickButton(m_driverController, Constants.Controls.lockNorth).whileTrue(
-//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(0))
-//        );
-//        new JoystickButton(m_driverController, Constants.Controls.lockSouth).whileTrue(
-//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(180))
-//        );
-//        new JoystickButton(m_driverController, Constants.Controls.lockEast).whileTrue(
-//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(270))
-//        );
-//        new JoystickButton(m_driverController, Constants.Controls.lockWest).whileTrue(
-//                new LockRotation(m_robotDrive, Rotation2d.fromDegrees(90))
-//        );
-          new JoystickButton(driverController, Constants.Controls.lightTrack).whileTrue(
-                  new LimelightCmd(m_limelight, m_robotDrive, driverController)
-          );
-//        new JoystickButton(m_driverController, Constants.Controls.tare).whileTrue(
-//                new TareCmd(m_robotDrive)
-//        );
-
-         new POVButton(driverController, 0)
-                 .onTrue(new ElevatorUpCmd(eleSub))
-                 .onFalse(new ElevatorStopCmd(eleSub));
+        new POVButton(driverController, 0)
+                .onTrue(new ElevatorUpCmd(eleSub))
+                .onFalse(new ElevatorStopCmd(eleSub));
         new POVButton(driverController, 180)
                 .onTrue(new ElevatorDownCmd(eleSub))
                 .onFalse(new ElevatorStopCmd(eleSub));
@@ -126,12 +127,11 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
     public Command getAutonomousCommand() {
-//        return autoChooser.getSelected().andThen(new Command() {
-//            @Override
-//            public void initialize() {
-//                System.out.println("Hello end of auto");
-//            }
-//        });
-        return null;
+        return autoChooser.getSelected().andThen(new Command() {
+            @Override
+            public void initialize() {
+                System.out.println("Hello end of auto");
+            }
+        });
     }
 }

@@ -8,20 +8,17 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.*;
-import frc.robot.subsystems.ChuteSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,6 +32,8 @@ public class RobotContainer {
     private final ChuteSubsystem chuteSub;
     public final LimelightSubsystem m_limelight;
     private final ElevatorSubsystem eleSub;
+    private final ConveyorSubsystem conveySub;
+    private final IntakeSubsystem intakeSub;
 
     public double getGyro() {
         return m_robotDrive.getGyro().getDegrees();
@@ -42,6 +41,7 @@ public class RobotContainer {
 
     // The driver's controller
     XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+    Joystick flightstickController = new Joystick(OIConstants.kFlightstickControllerPort);
 
     private final SendableChooser<Command> autoChooser;
     /**
@@ -53,12 +53,17 @@ public class RobotContainer {
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");
         m_limelight = new LimelightSubsystem(networkTable);
         eleSub = new ElevatorSubsystem();
+        conveySub = new ConveyorSubsystem();
+        intakeSub = new IntakeSubsystem();
+
+
         // Configure the button bindings
         configureButtonBindings();
 
         NamedCommands.registerCommand("Limelight", new AutoLimelightCmd(m_robotDrive, m_limelight, 0.5));
-        NamedCommands.registerCommand("ElevatorL2", new ElevatorMacroCmd(150, eleSub));
-        NamedCommands.registerCommand("ElevatorL3", new ElevatorMacroCmd(350, eleSub));
+        NamedCommands.registerCommand("ElevatorL2", new ElevatorMacroCmd(260, eleSub));
+        NamedCommands.registerCommand("ElevatorL3", new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub));
+        NamedCommands.registerCommand("ShootMacro", new ChuteMacroCmd(chuteSub, eleSub));
 
         // Configure default commands
         m_robotDrive.setDefaultCommand(
@@ -72,6 +77,9 @@ public class RobotContainer {
                                 true),
                         m_robotDrive));
 
+        intakeSub.setDefaultCommand(
+                new IntakeCmd(intakeSub, driverController)
+        );
 
         System.out.println("=== Chooser ===");
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -92,33 +100,55 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
-//            new JoystickButton(driverController, Constants.Controls.shootMacro).onTrue(
-//                    new
-//            )
-        new JoystickButton(driverController, Constants.Controls.l2Macro).onTrue(
-                new ElevatorMacroCmd(260, eleSub)
+
+        // XBOX Controls
+        new JoystickButton(driverController, Constants.Controls.conveyUp).whileTrue(
+                new ConveyorInCmd(conveySub)
         );
-        new JoystickButton(driverController, Constants.Controls.l3Macro).onTrue(
-                new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub)
-        );
-        new JoystickButton(driverController, Constants.Controls.downMacro).onTrue(
-                new ElevatorMacroCmd(0, eleSub)
+        new JoystickButton(driverController, Constants.Controls.conveyDown).whileTrue(
+                new ConveyorOutCmd(conveySub)
         );
         new JoystickButton(driverController, Constants.Controls.aprilTagTrack).whileTrue(
                 new LimelightCmd(m_limelight, m_robotDrive, driverController)
         );
+        new JoystickButton(driverController, Constants.Controls.hingeDown).onTrue(
+                new HingeDownCmd(intakeSub)
+        );
+        new JoystickButton(driverController, Constants.Controls.hingeUp).onTrue(
+                new HingeUpCmd(intakeSub)
+        );
 
-        new POVButton(driverController, 0)
-                .onTrue(new ElevatorUpCmd(eleSub))
-                .onFalse(new ElevatorStopCmd(eleSub));
-        new POVButton(driverController, 180)
-                .onTrue(new ElevatorDownCmd(eleSub))
-                .onFalse(new ElevatorStopCmd(eleSub));
-
-        new JoystickButton(driverController, Constants.Controls.pistonOut)
-                .onTrue(new PistonExtendCmd(chuteSub));
-        new JoystickButton(driverController, Constants.Controls.pistonIn)
-                .onTrue(new PistonRetractCmd(chuteSub));
+        // Flightstick Controls
+        new JoystickButton(flightstickController, Constants.Controls.macroL2).onTrue(
+                new ElevatorMacroCmd(260, eleSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.macroL3).onTrue(
+                new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.macroDown).onTrue(
+                new ElevatorMacroCmd(0, eleSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.elevatorUp).whileTrue(
+                new ElevatorUpCmd(eleSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.elevatorDown).whileTrue(
+                new ElevatorDownCmd(eleSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.flywheelIn).whileTrue(
+                new FlywheelInCmd(chuteSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.flywheelOut).whileTrue(
+                new FlywheelOutCmd(chuteSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.chuteIn).onTrue(
+                new PistonExtendCmd(chuteSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.chuteOut).onTrue(
+                new PistonRetractCmd(chuteSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.macroShoot).onTrue(
+                new ChuteMacroCmd(chuteSub, eleSub)
+        );
     }
 
         /**

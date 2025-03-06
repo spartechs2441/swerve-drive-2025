@@ -66,7 +66,23 @@ public final class Constants {
         // Test this when changing the elevator
         public static final int encoderLimit = 387;
         public static final int voltage = 7;
+    }
 
+    public static final class ConveyorConstants {
+        public static final int canId = 10;
+        public static final int voltage = 4;
+    }
+
+    public static final class IntakeConstants {
+        public static final int hingeCanId = -1;
+        public static final int intakeCanId = -1;
+        public static final int hingeVoltage = 0;
+        public static final int intakeVoltage = 0;
+    }
+
+    public static final class ChuteConstants {
+        public static final int canId = -1;
+        public static final int voltage = 0;
     }
 
     public static final class ModuleConstants {
@@ -88,6 +104,7 @@ public final class Constants {
 
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
+        public static final int kFlightstickControllerPort = 1;
         public static final double kDriveDeadband = 0.05;
     }
 
@@ -111,15 +128,25 @@ public final class Constants {
     }
 
     public static final class Controls {
-        public static final int l2Macro = XboxController.Button.kA.value;
-        public static final int l3Macro = XboxController.Button.kB.value;
-        public static final int shootMacro = XboxController.Button.kY.value;
+        public static final int conveyUp = XboxController.Button.kA.value;
+        public static final int conveyDown = XboxController.Button.kY.value;
         public static final int aprilTagTrack = XboxController.Button.kX.value;
-        public static final int lightTrack = XboxController.Button.kRightBumper.value;
+        public static final int hingeUp = XboxController.Button.kRightBumper.value;
+        public static final int hingeDown = XboxController.Button.kLeftBumper.value;
+        public static final int intakeIn = XboxController.Axis.kLeftTrigger.value;
+        public static final int intakeOut = XboxController.Axis.kRightTrigger.value;
         public static final int tare = XboxController.Button.kStart.value;
-        public static final int pistonOut = XboxController.Button.kA.value;
-        public static final int pistonIn = XboxController.Button.kB.value;
-        public static final int downMacro = XboxController.Button.kBack.value;
+
+        public static final int macroShoot = 1;
+        public static final int macroDown = 2;
+        public static final int flywheelOut = 3;
+        public static final int flywheelIn = 5;
+        public static final int elevatorDown = 4;
+        public static final int elevatorUp = 6;
+        public static final int chuteIn = 10;
+        public static final int chuteOut = 9;
+        public static final int macroL2 = 7;
+        public static final int macroL3 = 8;
 
         //Controller Controls
         public static final int yMovement = XboxController.Axis.kLeftX.value; //The X and Y Movement are switched

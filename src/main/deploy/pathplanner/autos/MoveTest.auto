@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "StartM1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorL2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootMacro"
           }
         }
       ]

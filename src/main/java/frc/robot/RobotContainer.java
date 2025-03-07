@@ -141,7 +141,7 @@ public class RobotContainer {
                 new FlywheelOutCmd(chuteSub)
         );
         new JoystickButton(flightstickController, Constants.Controls.chuteIn).onTrue(
-                new PistonExtendCmd(chuteSub)
+                new PistonExtendCmd(chuteSub, eleSub)
         );
         new JoystickButton(flightstickController, Constants.Controls.chuteOut).onTrue(
                 new PistonRetractCmd(chuteSub)

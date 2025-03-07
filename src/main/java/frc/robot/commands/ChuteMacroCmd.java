@@ -13,10 +13,10 @@ public class ChuteMacroCmd extends Command {
         this.eleSub = eleSub;
         addRequirements(chuteSub);
 
-        new PistonExtendCmd(chuteSub).andThen(
-                new FlywheelOutCmd(chuteSub),
-                new WaitCommand(1),
-                new PistonRetractCmd(chuteSub),
+        new PistonExtendCmd(chuteSub, eleSub).andThen(
+                // without timeout, this will go on forever
+                new FlywheelOutCmd(chuteSub).withTimeout(1),
+                new PistonRetractCmd(chuteSub).withTimeout(0.5),
                 new ElevatorMacroCmd(0, eleSub)
         );
     }

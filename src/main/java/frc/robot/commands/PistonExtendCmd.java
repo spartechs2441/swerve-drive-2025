@@ -2,15 +2,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ChuteSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 public class PistonExtendCmd extends Command {
     ChuteSubsystem chuteSub;
+    ElevatorSubsystem eleSub;
     private long time;
-    public PistonExtendCmd(ChuteSubsystem chuteSub) {
+    public PistonExtendCmd(ChuteSubsystem chuteSub, ElevatorSubsystem eleSub) {
         this.chuteSub = chuteSub;
+        this.eleSub = eleSub;
         this.time = System.currentTimeMillis();
 ;
-        addRequirements(chuteSub);
+        addRequirements(chuteSub, eleSub);
     }
 
     @Override
@@ -20,6 +23,6 @@ public class PistonExtendCmd extends Command {
 
     @Override
     public void execute() {
-        chuteSub.extendPiston();
+        chuteSub.extendPiston(eleSub.getElevatorEncoder());
     }
 }

@@ -13,6 +13,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final RelativeEncoder elevatorEncoder;
     public DigitalInput limitSwitch = new DigitalInput(Constants.ElevatorConstants.limitSwitchDIo);
 
+
     public ElevatorSubsystem() {
         this.elevatorEncoder = elevator.getEncoder();
     }
@@ -59,5 +60,9 @@ public class ElevatorSubsystem extends SubsystemBase {
             elevatorStop();
         }
         System.out.println(elevatorEncoder.getPosition());
+    }
+
+    public RelativeEncoder getElevatorEncoder() {
+        return elevatorEncoder;
     }
 }

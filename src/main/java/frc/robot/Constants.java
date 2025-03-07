@@ -83,6 +83,11 @@ public final class Constants {
     public static final class ChuteConstants {
         public static final int canId = -1;
         public static final int voltage = 0;
+        /**
+         * The elevator encoder value required for the piston to extend.
+         * This is to prevent the piston from hitting the robot
+         */
+        public static final double pistonThreshold = 100;
     }
 
     public static final class ModuleConstants {

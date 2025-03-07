@@ -28,15 +28,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
     // The robot's subsystems
-    private final DriveSubsystem m_robotDrive;
+    private final DriveSubsystem robotDrive;
     private final ChuteSubsystem chuteSub;
-    public final LimelightSubsystem m_limelight;
+    public final LimelightSubsystem limelight;
     private final ElevatorSubsystem eleSub;
     private final ConveyorSubsystem conveySub;
     private final IntakeSubsystem intakeSub;
 
     public double getGyro() {
-        return m_robotDrive.getGyro().getDegrees();
+        return robotDrive.getGyro().getDegrees();
     }
 
     // The driver's controller
@@ -48,10 +48,10 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        m_robotDrive = new DriveSubsystem();
+        robotDrive = new DriveSubsystem();
         chuteSub = new ChuteSubsystem();
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");
-        m_limelight = new LimelightSubsystem(networkTable);
+        limelight = new LimelightSubsystem(networkTable);
         eleSub = new ElevatorSubsystem();
         conveySub = new ConveyorSubsystem();
         intakeSub = new IntakeSubsystem();
@@ -60,22 +60,22 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        NamedCommands.registerCommand("Limelight", new AutoLimelightCmd(m_robotDrive, m_limelight, 0.5));
+        NamedCommands.registerCommand("Limelight", new AutoLimelightCmd(robotDrive, limelight, 0.5));
         NamedCommands.registerCommand("ElevatorL2", new ElevatorMacroCmd(260, eleSub));
         NamedCommands.registerCommand("ElevatorL3", new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub));
         NamedCommands.registerCommand("ShootMacro", new ChuteMacroCmd(chuteSub, eleSub));
 
         // Configure default commands
-        m_robotDrive.setDefaultCommand(
+        robotDrive.setDefaultCommand(
                 // The left stick controls translation of the robot.
                 // Turning is controlled by the X axis of the right stick.
                 new RunCommand(
-                        () -> m_robotDrive.drive(
+                        () -> robotDrive.drive(
                                 -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
                                 MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
                                 -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
                                 true),
-                        m_robotDrive));
+                        robotDrive));
 
         intakeSub.setDefaultCommand(
                 new IntakeCmd(intakeSub, driverController)
@@ -98,8 +98,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         new JoystickButton(driverController, Button.kR1.value)
                 .whileTrue(new RunCommand(
-                        () -> m_robotDrive.setX(),
-                        m_robotDrive));
+                        () -> robotDrive.setX(),
+                        robotDrive));
 
         // XBOX Controls
         new JoystickButton(driverController, Constants.Controls.conveyUp).whileTrue(
@@ -109,7 +109,7 @@ public class RobotContainer {
                 new ConveyorOutCmd(conveySub)
         );
         new JoystickButton(driverController, Constants.Controls.aprilTagTrack).whileTrue(
-                new LimelightCmd(m_limelight, m_robotDrive, driverController)
+                new LimelightCmd(limelight, robotDrive, driverController)
         );
         new JoystickButton(driverController, Constants.Controls.hingeDown).onTrue(
                 new HingeDownCmd(intakeSub)

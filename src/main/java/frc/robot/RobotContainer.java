@@ -149,6 +149,33 @@ public class RobotContainer {
         new JoystickButton(flightstickController, Constants.Controls.macroShoot).onTrue(
                 new ChuteMacroCmd(chuteSub, eleSub)
         );
+
+        // A mere test
+        new JoystickButton(flightstickController, 12).onTrue(
+                new Command() {
+                    @Override
+                    public void execute() {
+                        chuteSub.compressor.enableDigital();
+                        System.out.println(chuteSub.compressor.getPressure());
+                    }
+                    @Override
+                    public boolean isFinished() {
+                        return true;
+                    }
+                }
+        );
+        new JoystickButton(flightstickController, 11).onTrue(
+                new Command() {
+                    @Override
+                    public void execute() {
+                        chuteSub.compressor.disable();
+                    }
+                    @Override
+                    public boolean isFinished() {
+                        return true;
+                    }
+                }
+        );
     }
 
         /**

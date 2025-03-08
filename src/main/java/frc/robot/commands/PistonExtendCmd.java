@@ -7,12 +7,12 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class PistonExtendCmd extends Command {
     ChuteSubsystem chuteSub;
     ElevatorSubsystem eleSub;
-    private long time;
+    private final long time;
     public PistonExtendCmd(ChuteSubsystem chuteSub, ElevatorSubsystem eleSub) {
         this.chuteSub = chuteSub;
         this.eleSub = eleSub;
         this.time = System.currentTimeMillis();
-;
+
         addRequirements(chuteSub, eleSub);
     }
 

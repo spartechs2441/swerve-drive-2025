@@ -6,11 +6,7 @@ import frc.robot.subsystems.ChuteSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ChuteMacroCmd extends Command {
-    private final ChuteSubsystem chuteSub;
-    private final ElevatorSubsystem eleSub;
     public ChuteMacroCmd(ChuteSubsystem chuteSub, ElevatorSubsystem eleSub) {
-        this.chuteSub = chuteSub;
-        this.eleSub = eleSub;
         addRequirements(chuteSub);
 
         new PistonExtendCmd(chuteSub, eleSub).andThen(

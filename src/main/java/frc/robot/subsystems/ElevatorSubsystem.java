@@ -44,8 +44,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     private void safeUp() {
-        if (elevatorEncoder.getPosition() < Constants.ElevatorConstants.encoderLimit
-                && !limitSwitch.get()) {
+        boolean isSafe = elevatorEncoder.getPosition() < Constants.ElevatorConstants.encoderLimit && !limitSwitch.get();
+        if (isSafe) {
             elevator.setVoltage(Constants.ElevatorConstants.voltage);
         } else {
             elevatorStop();
@@ -54,7 +54,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     private void safeDown() {
-        if (elevatorEncoder.getPosition() > -10) {
+        boolean isSafe = elevatorEncoder.getPosition() > -10;
+        if (isSafe) {
             elevator.setVoltage(-Constants.ElevatorConstants.voltage);
         } else {
             elevatorStop();

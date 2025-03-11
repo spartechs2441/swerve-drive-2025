@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 4.712768478226648,
-        "y": 1.7722842139822153
+        "y": 1.772284213982215
       },
       "nextControl": {
         "x": 4.298129814561455,
@@ -93,7 +93,7 @@
     "rotation": 61.3895403340347
   },
   "reversed": false,
-  "folder": "StartCageR",
+  "folder": "StartCageRBlu",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

@@ -3,8 +3,8 @@
   "robotLength": 0.724,
   "holonomicMode": true,
   "pathFolders": [
-    "StartCageR",
-    "StartCageB",
+    "StartCageBBlu",
+    "StartCageRBlu",
     "StartMBlu",
     "StartMRed"
   ],

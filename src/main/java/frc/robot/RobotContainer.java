@@ -102,13 +102,13 @@ public class RobotContainer {
                         robotDrive));
 
         // XBOX Controls
-        new JoystickButton(driverController, Constants.Controls.conveyUp).whileTrue(
+        new JoystickButton(driverController, Constants.Controls.conveyUp).onTrue(
                 new ConveyorInCmd(conveySub)
         );
-        new JoystickButton(driverController, Constants.Controls.conveyDown).whileTrue(
+        new JoystickButton(driverController, Constants.Controls.conveyDown).onTrue(
                 new ConveyorOutCmd(conveySub)
         );
-        new JoystickButton(driverController, Constants.Controls.aprilTagTrack).whileTrue(
+        new JoystickButton(driverController, Constants.Controls.aprilTagTrack).onTrue(
                 new LimelightCmd(limelight, robotDrive, driverController)
         );
         new JoystickButton(driverController, Constants.Controls.hingeDown).onTrue(
@@ -128,18 +128,18 @@ public class RobotContainer {
         new JoystickButton(flightstickController, Constants.Controls.macroDown).onTrue(
                 new ElevatorMacroCmd(0, eleSub)
         );
-        new JoystickButton(flightstickController, Constants.Controls.elevatorUp).whileTrue(
-                new ElevatorUpCmd(eleSub)
-        );
-        new JoystickButton(flightstickController, Constants.Controls.elevatorDown).whileTrue(
-                new ElevatorDownCmd(eleSub)
-        );
-        new JoystickButton(flightstickController, Constants.Controls.flywheelIn).whileTrue(
-                new FlywheelInCmd(chuteSub)
-        );
-        new JoystickButton(flightstickController, Constants.Controls.flywheelOut).whileTrue(
-                new FlywheelOutCmd(chuteSub)
-        );
+        new JoystickButton(flightstickController, Constants.Controls.elevatorUp)
+                .onTrue(new ElevatorUpCmd(eleSub))
+                .onFalse(new ElevatorStopCmd(eleSub));
+        new JoystickButton(flightstickController, Constants.Controls.elevatorDown)
+                .onTrue(new ElevatorDownCmd(eleSub))
+                .onFalse(new ElevatorStopCmd(eleSub));
+        new JoystickButton(flightstickController, Constants.Controls.flywheelIn)
+                .onTrue(new FlywheelInCmd(chuteSub))
+                .onFalse(new FlywheelStopCmd(chuteSub));
+        new JoystickButton(flightstickController, Constants.Controls.flywheelOut)
+                .onTrue(new FlywheelOutCmd(chuteSub))
+                .onFalse(new FlywheelStopCmd(chuteSub));
         new JoystickButton(flightstickController, Constants.Controls.chuteIn).onTrue(
                 new PistonExtendCmd(chuteSub, eleSub)
         );

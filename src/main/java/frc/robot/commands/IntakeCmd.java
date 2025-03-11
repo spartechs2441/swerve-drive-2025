@@ -13,9 +13,9 @@ public class IntakeCmd extends Command {
         addRequirements(intakeSub);
     }
 
-    @Override
-    public void execute() {
-       double speed = driverController.getLeftTriggerAxis() - driverController.getRightTriggerAxis();
-       intakeSub.intake(speed);
-    }
+//    @Override
+//    public void execute() {
+//       double speed = driverController.getLeftTriggerAxis() - driverController.getRightTriggerAxis();
+//       intakeSub.intake(speed);
+//    }
 }

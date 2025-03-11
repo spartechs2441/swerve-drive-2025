@@ -10,8 +10,8 @@ public class HingeDownCmd extends Command {
         addRequirements(intakeSub);
     }
 
-    @Override
-    public void execute() {
-        intakeSub.hingeDown();
-    }
+//    @Override
+//    public void execute() {
+//        intakeSub.hingeDown();
+//    }
 }

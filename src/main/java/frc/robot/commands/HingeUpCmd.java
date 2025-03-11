@@ -10,8 +10,8 @@ public class HingeUpCmd extends Command {
         addRequirements(intakeSub);
     }
 
-    @Override
-    public void execute() {
-        intakeSub.hingeUp();
-    }
+//    @Override
+//    public void execute() {
+//        intakeSub.hingeUp();
+//    }
 }

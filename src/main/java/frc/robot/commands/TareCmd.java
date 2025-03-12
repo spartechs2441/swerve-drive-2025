@@ -11,6 +11,7 @@ public class TareCmd extends Command {
         this.driveSub = driveSub;
         addRequirements(driveSub);
     }
+
     @Override
     public void execute() {
         this.driveSub.tare();

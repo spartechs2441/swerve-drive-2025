@@ -10,16 +10,16 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -48,7 +48,9 @@ public class RobotContainer {
     public void nyanCat() {
         ledManager.setStatus(LEDStatus.RANDOM);
     }
+
     private final SendableChooser<Command> autoChooser;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -164,6 +166,7 @@ public class RobotContainer {
                         chuteSub.compressor.enableDigital();
                         System.out.println(chuteSub.compressor.getPressure());
                     }
+
                     @Override
                     public boolean isFinished() {
                         return true;
@@ -176,6 +179,7 @@ public class RobotContainer {
                     public void execute() {
                         chuteSub.compressor.disable();
                     }
+
                     @Override
                     public boolean isFinished() {
                         return true;
@@ -184,11 +188,11 @@ public class RobotContainer {
         );
     }
 
-        /**
-         * Use this to pass the autonomous command to the main {@link Robot} class.
-         *
-         * @return the command to run in autonomous
-         */
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected().andThen(new Command() {
             @Override

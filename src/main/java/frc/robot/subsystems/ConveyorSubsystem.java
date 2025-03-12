@@ -7,7 +7,9 @@ import frc.robot.Constants;
 
 public class ConveyorSubsystem extends SubsystemBase {
     private final SparkMax conveyor = new SparkMax(Constants.ConveyorConstants.canId, SparkLowLevel.MotorType.kBrushless);
-    public ConveyorSubsystem() {}
+
+    public ConveyorSubsystem() {
+    }
 
     public void conveyorIn() {
         conveyor.setVoltage(Constants.ConveyorConstants.voltage);

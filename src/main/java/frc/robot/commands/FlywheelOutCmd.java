@@ -5,6 +5,7 @@ import frc.robot.subsystems.ChuteSubsystem;
 
 public class FlywheelOutCmd extends Command {
     private final ChuteSubsystem chuteSub;
+
     public FlywheelOutCmd(ChuteSubsystem chuteSub) {
         this.chuteSub = chuteSub;
         addRequirements(chuteSub);

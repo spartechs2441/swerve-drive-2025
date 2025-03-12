@@ -15,7 +15,9 @@ public class ChuteSubsystem extends SubsystemBase {
             new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 4, 5);
     private final SparkMax flywheel = new SparkMax(Constants.ChuteConstants.canId, SparkLowLevel.MotorType.kBrushless);
     public final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
-    public ChuteSubsystem() {}
+
+    public ChuteSubsystem() {
+    }
 
     public void extendPiston(RelativeEncoder encoder) {
         if (encoder.getPosition() >= Constants.ChuteConstants.pistonThreshold) {

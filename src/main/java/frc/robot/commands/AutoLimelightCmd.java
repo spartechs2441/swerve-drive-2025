@@ -14,8 +14,9 @@ public class AutoLimelightCmd extends Command {
         this.driveSubsystem = driveSubsystem;
         this.llSub = llSub;
         this.y = y;
-        addRequirements(driveSubsystem,llSub);
+        addRequirements(driveSubsystem, llSub);
     }
+
     @Override
     public void execute() {
         llSub.drive(y, driveSubsystem);

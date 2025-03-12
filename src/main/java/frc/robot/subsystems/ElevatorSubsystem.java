@@ -21,9 +21,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void elevatorUp() {
         safeUp();
     }
+
     public void elevatorDown() {
         safeDown();
     }
+
     public void elevatorStop() {
         elevator.setVoltage(0);
     }

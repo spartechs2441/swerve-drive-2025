@@ -5,6 +5,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class HingeDownCmd extends Command {
     private final IntakeSubsystem intakeSub;
+
     public HingeDownCmd(IntakeSubsystem intakeSub) {
         this.intakeSub = intakeSub;
         addRequirements(intakeSub);

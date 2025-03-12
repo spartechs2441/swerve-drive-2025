@@ -12,6 +12,7 @@ public class ElevatorMacroCmd extends Command {
         this.eleSub = eleSub;
         addRequirements(eleSub);
     }
+
     @Override
     public void execute() {
         eleSub.macro(target);

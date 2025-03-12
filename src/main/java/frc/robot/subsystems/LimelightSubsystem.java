@@ -7,10 +7,10 @@ import frc.robot.Constants;
 
 public class LimelightSubsystem extends SubsystemBase {
     NetworkTable llight;
-    private NetworkTableEntry tx;
-    private NetworkTableEntry ty;
-    private NetworkTableEntry ta;
-    private NetworkTableEntry tv;
+    private final NetworkTableEntry tx;
+    private final NetworkTableEntry ty;
+    private final NetworkTableEntry ta;
+    private final NetworkTableEntry tv;
     private double x;
     private double y;
     private double area;

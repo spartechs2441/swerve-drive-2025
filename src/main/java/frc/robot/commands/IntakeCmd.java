@@ -7,6 +7,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeCmd extends Command {
     private final IntakeSubsystem intakeSub;
     private final XboxController driverController;
+
     public IntakeCmd(IntakeSubsystem intakeSub, XboxController driverController) {
         this.intakeSub = intakeSub;
         this.driverController = driverController;

@@ -8,6 +8,7 @@ public class PistonExtendCmd extends Command {
     ChuteSubsystem chuteSub;
     ElevatorSubsystem eleSub;
     private final long time;
+
     public PistonExtendCmd(ChuteSubsystem chuteSub, ElevatorSubsystem eleSub) {
         this.chuteSub = chuteSub;
         this.eleSub = eleSub;

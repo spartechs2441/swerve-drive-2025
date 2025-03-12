@@ -119,11 +119,13 @@ public class RobotContainer {
         new JoystickButton(driverController, Constants.Controls.aprilTagTrack).onTrue(
                 new LimelightCmd(limelight, robotDrive, driverController)
         );
-        new JoystickButton(driverController, Constants.Controls.hingeDown).onTrue(
-                new HingeDownCmd(intakeSub)
+        new JoystickButton(driverController, Constants.Controls.hingeDown)
+                .onTrue(new HingeDownCmd(intakeSub))
+                .onFalse(new HingeStopCmd(intakeSub)
         );
-        new JoystickButton(driverController, Constants.Controls.hingeUp).onTrue(
-                new HingeUpCmd(intakeSub)
+        new JoystickButton(driverController, Constants.Controls.hingeUp)
+                .onTrue(new HingeUpCmd(intakeSub))
+                .onFalse(new HingeStopCmd(intakeSub)
         );
 
         // Flightstick Controls

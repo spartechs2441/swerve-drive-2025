@@ -74,8 +74,8 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        public static final int hingeCanId = -1;
-        public static final int intakeCanId = -1;
+        public static final int hingeCanId = 20;
+        public static final int intakeCanId = 21;
         public static final int hingeVoltage = 0;
         public static final int intakeVoltage = 0;
     }

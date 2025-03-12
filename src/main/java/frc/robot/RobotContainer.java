@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
@@ -34,6 +35,7 @@ public class RobotContainer {
     private final ElevatorSubsystem eleSub;
     private final ConveyorSubsystem conveySub;
     private final IntakeSubsystem intakeSub;
+    private final LEDManager ledManager;
 
     public double getGyro() {
         return robotDrive.getGyro().getDegrees();
@@ -43,11 +45,15 @@ public class RobotContainer {
     XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
     Joystick flightstickController = new Joystick(OIConstants.kFlightstickControllerPort);
 
+    public void nyanCat() {
+        ledManager.setStatus(LEDStatus.RANDOM);
+    }
     private final SendableChooser<Command> autoChooser;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        ledManager = new LEDManager(new AddressableLED(Constants.LED.ledPort), Constants.LED.ledLength);
         robotDrive = new DriveSubsystem();
         chuteSub = new ChuteSubsystem();
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");

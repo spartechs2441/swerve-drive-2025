@@ -123,6 +123,7 @@ public final class Constants {
         public static final double kPYController = 1;
         public static final double kPThetaController = 1;
 
+
         // Constraint for the motion profiled robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -157,5 +158,9 @@ public final class Constants {
         public static final int yMovement = XboxController.Axis.kLeftX.value; //The X and Y Movement are switched
         public static final int xMovement = XboxController.Axis.kLeftY.value;
         public static final int rotation = XboxController.Axis.kRightX.value;
+    }
+    public class LED {
+        public static final int ledPort = 0;
+        public static final int ledLength = 60;
     }
 }

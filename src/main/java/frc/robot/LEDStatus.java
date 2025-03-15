@@ -6,5 +6,7 @@ public enum LEDStatus {
     L2,
     L3,
     SHOOTING,
-    RANDOM
+    RANDOM,
+    BUFFER_ALL,
+    BUFFER_STREAM
 }

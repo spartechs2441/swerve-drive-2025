@@ -9,17 +9,21 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
+import java.util.HashMap;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -42,11 +46,11 @@ public class RobotContainer {
     }
 
     // The driver's controller
-    XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
-    Joystick flightstickController = new Joystick(OIConstants.kFlightstickControllerPort);
+    XboxController driverController;
+    Joystick flightstickController;
 
     public void nyanCat() {
-        ledManager.setStatus(LEDStatus.RANDOM);
+//        ledManager.updateLEDs(LEDStatus.RANDOM);
     }
 
     private final SendableChooser<Command> autoChooser;
@@ -55,14 +59,17 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        ledManager = new LEDManager(new AddressableLED(Constants.LED.ledPort), Constants.LED.ledLength);
+        ledManager = null; // new LEDManager(new AddressableLED(Constants.LED.ledPort), Constants.LED.ledLength);
         robotDrive = new DriveSubsystem();
         chuteSub = new ChuteSubsystem();
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");
         limelight = new LimelightSubsystem(networkTable);
-        eleSub = new ElevatorSubsystem();
+        eleSub = new ElevatorSubsystem(chuteSub);
         conveySub = new ConveyorSubsystem();
         intakeSub = new IntakeSubsystem();
+
+        driverController = new XboxController(OIConstants.kDriverControllerPort);
+        flightstickController = new Joystick(OIConstants.kFlightstickControllerPort);
 
 
         // Configure the button bindings
@@ -94,6 +101,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
+
     /**
      * Use this method to define your button->command mappings. Buttons can be
      * created by
@@ -104,17 +112,17 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(driverController, Button.kR1.value)
-                .whileTrue(new RunCommand(
-                        () -> robotDrive.setX(),
-                        robotDrive));
+        // The checker sees all
+        CommandScheduler.getInstance().schedule(new ControllerCheckCmd());
 
         // XBOX Controls
-        new JoystickButton(driverController, Constants.Controls.conveyUp).onTrue(
-                new ConveyorInCmd(conveySub)
+        new JoystickButton(driverController, Constants.Controls.conveyUp)
+                .onTrue(new ConveyorInCmd(conveySub))
+                .onFalse(new ConveyorStopCmd(conveySub)
         );
-        new JoystickButton(driverController, Constants.Controls.conveyDown).onTrue(
-                new ConveyorOutCmd(conveySub)
+        new JoystickButton(driverController, Constants.Controls.conveyDown)
+                .onTrue(new ConveyorOutCmd(conveySub))
+                .onFalse(new ConveyorStopCmd(conveySub)
         );
         new JoystickButton(driverController, Constants.Controls.aprilTagTrack).onTrue(
                 new LimelightCmd(limelight, robotDrive, driverController)
@@ -130,7 +138,7 @@ public class RobotContainer {
 
         // Flightstick Controls
         new JoystickButton(flightstickController, Constants.Controls.macroL2).onTrue(
-                new ElevatorMacroCmd(260, eleSub)
+                new ElevatorMacroCmd(250, eleSub)
         );
         new JoystickButton(flightstickController, Constants.Controls.macroL3).onTrue(
                 new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub)
@@ -166,7 +174,6 @@ public class RobotContainer {
                     @Override
                     public void execute() {
                         chuteSub.compressor.enableDigital();
-                        System.out.println(chuteSub.compressor.getPressure());
                     }
 
                     @Override
@@ -180,6 +187,7 @@ public class RobotContainer {
                     @Override
                     public void execute() {
                         chuteSub.compressor.disable();
+                        System.out.println("disabled?");
                     }
 
                     @Override

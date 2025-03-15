@@ -24,7 +24,15 @@ public class IntakeSubsystem extends SubsystemBase {
         hinge.setVoltage(0);
     }
 
-    public void intake(double speed) {
-        intake.setVoltage(Constants.IntakeConstants.intakeVoltage * speed);
+    public void intakeIn() {
+        intake.setVoltage(Constants.IntakeConstants.intakeVoltage);
+    }
+
+    public void intakeOut() {
+        intake.setVoltage(-Constants.IntakeConstants.intakeVoltage);
+    }
+
+    public void intakeStop() {
+        intake.setVoltage(0);
     }
 }

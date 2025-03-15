@@ -8,10 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,11 +16,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-
-import java.util.HashMap;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -76,8 +72,8 @@ public class RobotContainer {
         configureButtonBindings();
 
         NamedCommands.registerCommand("Limelight", new AutoLimelightCmd(robotDrive, limelight, 0.5));
-        NamedCommands.registerCommand("ElevatorL2", new ElevatorMacroCmd(260, eleSub));
-        NamedCommands.registerCommand("ElevatorL3", new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub));
+        NamedCommands.registerCommand("ElevatorL2", new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL2, eleSub));
+        NamedCommands.registerCommand("ElevatorL3", new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL3, eleSub));
         NamedCommands.registerCommand("ShootMacro", new ChuteMacroCmd(chuteSub, eleSub));
 
         // Configure default commands
@@ -91,10 +87,6 @@ public class RobotContainer {
                                 -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
                                 true),
                         robotDrive));
-
-        intakeSub.setDefaultCommand(
-                new IntakeCmd(intakeSub, driverController)
-        );
 
         System.out.println("=== Chooser ===");
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -116,32 +108,24 @@ public class RobotContainer {
         CommandScheduler.getInstance().schedule(new ControllerCheckCmd());
 
         // XBOX Controls
-        new JoystickButton(driverController, Constants.Controls.conveyUp)
-                .onTrue(new ConveyorInCmd(conveySub))
-                .onFalse(new ConveyorStopCmd(conveySub)
-        );
-        new JoystickButton(driverController, Constants.Controls.conveyDown)
-                .onTrue(new ConveyorOutCmd(conveySub))
-                .onFalse(new ConveyorStopCmd(conveySub)
-        );
         new JoystickButton(driverController, Constants.Controls.aprilTagTrack).onTrue(
                 new LimelightCmd(limelight, robotDrive, driverController)
         );
-        new JoystickButton(driverController, Constants.Controls.hingeDown)
+        new POVButton(driverController, Constants.Controls.hingeDown)
                 .onTrue(new HingeDownCmd(intakeSub))
                 .onFalse(new HingeStopCmd(intakeSub)
         );
-        new JoystickButton(driverController, Constants.Controls.hingeUp)
+        new POVButton(driverController, Constants.Controls.hingeUp)
                 .onTrue(new HingeUpCmd(intakeSub))
                 .onFalse(new HingeStopCmd(intakeSub)
         );
 
         // Flightstick Controls
         new JoystickButton(flightstickController, Constants.Controls.macroL2).onTrue(
-                new ElevatorMacroCmd(250, eleSub)
+                new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL2, eleSub)
         );
         new JoystickButton(flightstickController, Constants.Controls.macroL3).onTrue(
-                new ElevatorMacroCmd(Constants.ElevatorConstants.encoderLimit, eleSub)
+                new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL3, eleSub)
         );
         new JoystickButton(flightstickController, Constants.Controls.macroDown).onTrue(
                 new ElevatorMacroCmd(0, eleSub)
@@ -164,9 +148,18 @@ public class RobotContainer {
         new JoystickButton(flightstickController, Constants.Controls.chuteOut).onTrue(
                 new PistonRetractCmd(chuteSub)
         );
-        new JoystickButton(flightstickController, Constants.Controls.macroShoot).onTrue(
-                new ChuteMacroCmd(chuteSub, eleSub)
-        );
+        new JoystickButton(flightstickController, Constants.Controls.conveyorIn)
+                .onTrue(new ConveyorInCmd(conveySub))
+                .onFalse(new ConveyorStopCmd(conveySub));
+        new JoystickButton(flightstickController, Constants.Controls.conveyorOut)
+                .onTrue(new ConveyorOutCmd(conveySub))
+                .onFalse(new ConveyorStopCmd(conveySub));
+        new JoystickButton(flightstickController, Constants.Controls.intakeIn)
+                .onTrue(new IntakeInCmd(intakeSub))
+                .onFalse(new IntakeStopCmd(intakeSub));
+        new JoystickButton(flightstickController, Constants.Controls.intakeOut)
+                .onTrue(new IntakeOutCmd(intakeSub))
+                .onFalse(new IntakeStopCmd(intakeSub));
 
         // A mere test
         new JoystickButton(flightstickController, 12).onTrue(

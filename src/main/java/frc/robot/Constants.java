@@ -64,8 +64,11 @@ public final class Constants {
         public static final int canId = 12;
         public static final int limitSwitchDIo = 0;
         // Test this when changing the elevator
-        public static final int encoderLimit = 387;
+        public static final int encoderLimit = 500; // 387;
         public static final int voltage = 10;
+        // Encoder values for macros
+        public static final int encoderL2 = 250;
+        public static final int encoderL3 = 390;
     }
 
     public static final class ConveyorConstants {
@@ -135,23 +138,21 @@ public final class Constants {
     }
 
     public static final class Controls {
-        public static final int conveyUp = XboxController.Button.kA.value;
-        public static final int conveyDown = XboxController.Button.kY.value;
-        public static final int aprilTagTrack = XboxController.Button.kX.value;
-        public static final int hingeUp = XboxController.Button.kRightBumper.value;
-        public static final int hingeDown = XboxController.Button.kLeftBumper.value;
-        public static final int intakeIn = XboxController.Axis.kLeftTrigger.value;
-        public static final int intakeOut = XboxController.Axis.kRightTrigger.value;
-        public static final int tare = XboxController.Button.kStart.value;
+        public static final int aprilTagTrack = XboxController.Button.kB.value;
+        public static final int hingeUp = 0;
+        public static final int hingeDown = 180;
 
-        public static final int macroShoot = 1;
-        public static final int macroDown = 2;
-        public static final int flywheelOut = 3;
-        public static final int flywheelIn = 5;
+        public static final int macroDown = 0;
+        public static final int flywheelOut = 1;
+        public static final int flywheelIn = 2;
         public static final int elevatorDown = 4;
         public static final int elevatorUp = 6;
-        public static final int chuteIn = 10;
-        public static final int chuteOut = 9;
+        public static final int chuteIn = 11;
+        public static final int chuteOut = 12;
+        public static final int intakeIn = 10;
+        public static final int intakeOut = 9;
+        public static final int conveyorIn = 5;
+        public static final int conveyorOut = 3;
         public static final int macroL2 = 7;
         public static final int macroL3 = 8;
 

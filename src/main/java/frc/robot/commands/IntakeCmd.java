@@ -16,6 +16,11 @@ public class IntakeCmd extends Command {
 
     @Override
     public void execute() {
+        var left = driverController.getLeftTriggerAxis();
+        var right = driverController.getRightTriggerAxis();
+        if (left + right != 0) {
+            System.out.println(left + " | " + right);
+        }
        double speed = driverController.getLeftTriggerAxis() - driverController.getRightTriggerAxis();
        intakeSub.intake(speed);
     }

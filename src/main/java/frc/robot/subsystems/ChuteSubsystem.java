@@ -12,9 +12,14 @@ import frc.robot.Constants;
 public class ChuteSubsystem extends SubsystemBase {
 
     private final DoubleSolenoid doubleSolenoid =
-            new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 4, 5);
+            new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 4, 7);
     private final SparkMax flywheel = new SparkMax(Constants.ChuteConstants.canId, SparkLowLevel.MotorType.kBrushless);
-    public final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
+    public final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    private boolean isExtended = false;
+
+    public boolean isExtended() {
+        return isExtended;
+    }
 
     public ChuteSubsystem() {
     }
@@ -22,11 +27,13 @@ public class ChuteSubsystem extends SubsystemBase {
     public void extendPiston(RelativeEncoder encoder) {
         if (encoder.getPosition() >= Constants.ChuteConstants.pistonThreshold) {
             doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+            isExtended = true;
         }
     }
 
     public void retractPiston() {
         doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+        isExtended = false;
     }
 
     public void flywheelIn() {

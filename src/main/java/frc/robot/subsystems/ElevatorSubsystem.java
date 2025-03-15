@@ -12,9 +12,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final SparkMax elevator = new SparkMax(Constants.ElevatorConstants.canId, SparkLowLevel.MotorType.kBrushless);
     private final RelativeEncoder elevatorEncoder;
     public DigitalInput limitSwitch = new DigitalInput(Constants.ElevatorConstants.limitSwitchDIo);
+    private ChuteSubsystem chuteSub;
 
-
-    public ElevatorSubsystem() {
+    public ElevatorSubsystem(ChuteSubsystem chuteSub) {
+        this.chuteSub = chuteSub;
         this.elevatorEncoder = elevator.getEncoder();
     }
 
@@ -38,6 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             return;
         }
 
+        if (chuteSub.isExtended()) return;
         if (position <= desired) {
             elevatorUp();
         } else if (position > desired) {
@@ -46,13 +48,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     private void safeUp() {
-        boolean isSafe = elevatorEncoder.getPosition() < Constants.ElevatorConstants.encoderLimit && !limitSwitch.get();
+        boolean isSafe = elevatorEncoder.getPosition() < Constants.ElevatorConstants.encoderLimit
+                && !limitSwitch.get();
         if (isSafe) {
             elevator.setVoltage(Constants.ElevatorConstants.voltage);
         } else {
             elevatorStop();
         }
-        System.out.println(elevatorEncoder.getPosition());
     }
 
     private void safeDown() {
@@ -62,7 +64,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             elevatorStop();
         }
-        System.out.println(elevatorEncoder.getPosition());
     }
 
     public RelativeEncoder getElevatorEncoder() {

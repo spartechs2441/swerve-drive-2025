@@ -65,29 +65,30 @@ public final class Constants {
         public static final int limitSwitchDIo = 0;
         // Test this when changing the elevator
         public static final int encoderLimit = 387;
-        public static final int voltage = 7;
+        public static final int voltage = 10;
     }
 
     public static final class ConveyorConstants {
         public static final int canId = 10;
-        public static final int voltage = 4;
+        // It is reversed for some reason so we are having it be negative lol
+        public static final int voltage = -2;
     }
 
     public static final class IntakeConstants {
         public static final int hingeCanId = 20;
         public static final int intakeCanId = 21;
-        public static final int hingeVoltage = 0;
-        public static final int intakeVoltage = 0;
+        public static final int hingeVoltage = 2;
+        public static final int intakeVoltage = 10;
     }
 
     public static final class ChuteConstants {
         public static final int canId = 14;
-        public static final int voltage = 3;
+        public static final int voltage = 4;
         /**
          * The elevator encoder value required for the piston to extend.
          * This is to prevent the piston from hitting the robot
          */
-        public static final double pistonThreshold = 100;
+        public static final double pistonThreshold = 50;
     }
 
     public static final class ModuleConstants {

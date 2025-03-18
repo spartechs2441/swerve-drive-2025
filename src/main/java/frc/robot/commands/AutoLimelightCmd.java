@@ -8,22 +8,24 @@ public class AutoLimelightCmd extends Command {
 
     private final DriveSubsystem driveSubsystem;
     private final LimelightSubsystem llSub;
-    private final double y;
+    private final long time;
+    private final long start;
 
-    public AutoLimelightCmd(DriveSubsystem driveSubsystem, LimelightSubsystem llSub, double y) {
+    public AutoLimelightCmd(DriveSubsystem driveSubsystem, LimelightSubsystem llSub, long time) {
         this.driveSubsystem = driveSubsystem;
         this.llSub = llSub;
-        this.y = y;
+        this.time = time;
+        this.start = System.currentTimeMillis();
         addRequirements(driveSubsystem, llSub);
     }
 
     @Override
     public void execute() {
-        llSub.drive(y, driveSubsystem);
+        llSub.drive(0, driveSubsystem);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return start + time < System.currentTimeMillis();
     }
 }

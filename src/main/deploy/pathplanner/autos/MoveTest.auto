@@ -13,13 +13,19 @@
         {
           "type": "named",
           "data": {
+            "name": "Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ElevatorL2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootMacro"
+            "name": "FlywheelOut"
           }
         }
       ]

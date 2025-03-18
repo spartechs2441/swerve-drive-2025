@@ -54,7 +54,7 @@ public class LimelightSubsystem extends SubsystemBase {
     // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
     double limelightRangeProportional() {
         double kP = .1;
-        double targetingForwardSpeed = ty.getDouble(0.0) * kP;
+        double targetingForwardSpeed = ta.getDouble(0.0) * kP;
         targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
         targetingForwardSpeed *= -1.0;
         return targetingForwardSpeed;

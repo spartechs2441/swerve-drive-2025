@@ -32,14 +32,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void macro(double desired) {
-        final double tolerance = 10;
         double position = elevatorEncoder.getPosition();
-        if (Math.abs(position - desired) < tolerance) {
+        if (Math.abs(position - desired) < Constants.ElevatorConstants.gracePeriod) {
             elevatorStop();
             return;
         }
 
-        if (chuteSub.isExtended()) return;
+        // FIXME: RE-ENABLE WHEN PISTON IS BACK
+//        if (chuteSub.isExtended()) return;
         if (position <= desired) {
             elevatorUp();
         } else if (position > desired) {
@@ -55,6 +55,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             elevatorStop();
         }
+        System.out.println(elevatorEncoder.getPosition());
     }
 
     private void safeDown() {
@@ -64,6 +65,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             elevatorStop();
         }
+        System.out.println(elevatorEncoder.getPosition());
     }
 
     public RelativeEncoder getElevatorEncoder() {

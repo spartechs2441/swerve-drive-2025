@@ -26,7 +26,7 @@ public final class Constants {
     public static final class DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 1.0; // 4.8;
+        public static final double kMaxSpeedMetersPerSecond = 2.4; // 4.8;
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
         // Chassis configuration
@@ -64,11 +64,12 @@ public final class Constants {
         public static final int canId = 12;
         public static final int limitSwitchDIo = 0;
         // Test this when changing the elevator
-        public static final int encoderLimit = 500; // 387;
+        public static final int encoderLimit = 380; // 387;
+        public static final int gracePeriod = 3;
         public static final int voltage = 10;
         // Encoder values for macros
-        public static final int encoderL2 = 250;
-        public static final int encoderL3 = 390;
+        public static final int encoderL2 = 225;
+        public static final int encoderL3 = 360;
     }
 
     public static final class ConveyorConstants {
@@ -139,12 +140,13 @@ public final class Constants {
 
     public static final class Controls {
         public static final int aprilTagTrack = XboxController.Button.kB.value;
+        public static final int tareButton = XboxController.Button.kStart.value;
         public static final int hingeUp = 0;
         public static final int hingeDown = 180;
 
-        public static final int macroDown = 0;
-        public static final int flywheelOut = 1;
-        public static final int flywheelIn = 2;
+        public static final int macroDown = 2;
+        public static final int coralLoad = 1;
+//        public static final int flywheelIn = 2;
         public static final int elevatorDown = 4;
         public static final int elevatorUp = 6;
         public static final int chuteIn = 11;

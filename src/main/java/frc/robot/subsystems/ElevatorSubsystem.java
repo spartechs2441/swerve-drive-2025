@@ -11,7 +11,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private final SparkMax elevator = new SparkMax(Constants.ElevatorConstants.canId, SparkLowLevel.MotorType.kBrushless);
     private final RelativeEncoder elevatorEncoder;
-    public DigitalInput limitSwitch = new DigitalInput(Constants.ElevatorConstants.limitSwitchDIo);
     private ChuteSubsystem chuteSub;
 
     public ElevatorSubsystem(ChuteSubsystem chuteSub) {
@@ -48,8 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     private void safeUp() {
-        boolean isSafe = elevatorEncoder.getPosition() < Constants.ElevatorConstants.encoderLimit
-                && !limitSwitch.get();
+        boolean isSafe = elevatorEncoder.getPosition() < Constants.ElevatorConstants.encoderLimit;
         if (isSafe) {
             elevator.setVoltage(Constants.ElevatorConstants.voltage);
         } else {

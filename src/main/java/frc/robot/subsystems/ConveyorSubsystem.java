@@ -12,11 +12,11 @@ public class ConveyorSubsystem extends SubsystemBase {
     }
 
     public void conveyorIn() {
-        conveyor.setVoltage(Constants.ConveyorConstants.voltage);
+        conveyor.setVoltage(-Constants.ConveyorConstants.voltage);
     }
 
     public void conveyorOut() {
-        conveyor.setVoltage(-Constants.ConveyorConstants.voltage);
+        conveyor.setVoltage(Constants.ConveyorConstants.voltage);
     }
 
     public void conveyorStop() {

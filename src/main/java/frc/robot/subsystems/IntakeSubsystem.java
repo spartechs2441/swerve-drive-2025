@@ -25,11 +25,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void intakeIn() {
-        intake.setVoltage(Constants.IntakeConstants.intakeVoltage);
+        intake.setVoltage(-Constants.IntakeConstants.intakeVoltage);
     }
 
     public void intakeOut() {
-        intake.setVoltage(-Constants.IntakeConstants.intakeVoltage);
+        intake.setVoltage(Constants.IntakeConstants.intakeVoltage);
     }
 
     public void intakeStop() {

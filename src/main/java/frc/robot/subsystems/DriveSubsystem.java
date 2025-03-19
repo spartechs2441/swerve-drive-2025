@@ -43,7 +43,7 @@ public class DriveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightChassisAngularOffset);
     // The gyro sensor
     private final Pigeon2 gyro = new Pigeon2(0);
-    private double tare = 0;
+    private double tare = 45 + 180;
     // Odometry class for tracking robot pose
     SwerveDriveOdometry odometry = new SwerveDriveOdometry(
             DriveConstants.kDriveKinematics,
@@ -226,7 +226,7 @@ public class DriveSubsystem extends SubsystemBase {
     /**
      * Sets the wheels into an X formation to prevent movement.
      */
-    public void setX() {
+    public void formX() {
         frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
         frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
         rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));

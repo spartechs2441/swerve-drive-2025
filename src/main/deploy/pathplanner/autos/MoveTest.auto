@@ -9,24 +9,6 @@
           "data": {
             "pathName": "StartM1Blu"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Limelight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorL2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FlywheelOut"
-          }
         }
       ]
     }

@@ -79,7 +79,7 @@ public class RobotContainer {
                         robotDrive));
 
         System.out.println("=== Chooser ===");
-        AutoBuilder.buildAutoChooser();
+//        AutoBuilder.buildAutoChooser();
         this.autoChooser = new SendableChooser<Command>();
         autoChooser.addOption("Epic auto", AutoCmds.reefScore("MoveTest", robotDrive, limelight, eleSub, chuteSub));
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -90,7 +90,7 @@ public class RobotContainer {
     }
 
     public void nyanCat() {
-//        ledManager.updateLEDs(LEDStatus.RANDOM);
+//        ledManager.setStatus(LEDStatus.RANDOM);
     }
 
     /**
@@ -139,12 +139,12 @@ public class RobotContainer {
         new JoystickButton(flightstickController, Constants.Controls.coralLoad)
                 .onTrue(new CoralLoadCmd(conveySub, chuteSub))
                 .onFalse(new CoralLoadStopCmd(conveySub, chuteSub));
-//        new JoystickButton(flightstickController, Constants.Controls.chuteIn).onTrue(
-//                new PistonExtendCmd(chuteSub, eleSub)
-//        );
-//        new JoystickButton(flightstickController, Constants.Controls.chuteOut).onTrue(
-//                new PistonRetractCmd(chuteSub)
-//        );
+        new JoystickButton(flightstickController, Constants.Controls.chuteIn).onTrue(
+                new PistonExtendCmd(chuteSub, eleSub)
+        );
+        new JoystickButton(flightstickController, Constants.Controls.chuteOut).onTrue(
+                new PistonRetractCmd(chuteSub)
+        );
 //        new JoystickButton(flightstickController, Constants.Controls.conveyorIn)
 //                .onTrue(new ConveyorInCmd(conveySub))
 //                .onFalse(new ConveyorStopCmd(conveySub));
@@ -197,11 +197,12 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected().andThen(new Command() {
-            @Override
-            public void initialize() {
-                System.out.println("Hello end of auto");
-            }
-        });
+        return AutoCmds.reefScore("MoveTest", robotDrive, limelight, eleSub, chuteSub);
+//        return autoChooser.getSelected().andThen(new Command() {
+//            @Override
+//            public void initialize() {
+//                System.out.println("Hello end of auto");
+//            }
+//        });
     }
 }

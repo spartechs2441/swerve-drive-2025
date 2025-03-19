@@ -13,9 +13,11 @@ public class AutoCmds {
    public static Command reefScore(String autoName, DriveSubsystem driveSub, LimelightSubsystem llSub, ElevatorSubsystem eleSub, ChuteSubsystem chuteSub) {
        return new PathPlannerAuto(autoName)
                .andThen(
-                       new AutoLimelightCmd(driveSub, llSub, 1000),
+                       new AutoLimelightCmd(driveSub, llSub).withDeadline(new WaitCommand(2)),
+                       new AutoDriveStop(driveSub),
                        new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL3, eleSub).withDeadline(new WaitCommand(5)),
-                       new FlywheelOutCmd(chuteSub).withDeadline(new WaitCommand(2))
+                       new FlywheelOutCmd(chuteSub).withDeadline(new WaitCommand(1)),
+                       new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL2, eleSub).withDeadline(new WaitCommand(5))
                );
 
    }

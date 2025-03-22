@@ -26,8 +26,8 @@ public final class Constants {
     public static final class DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 2.4 / 2; // 4.8;
-        public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+        public static final double kMaxSpeedMetersPerSecond = 3.6; // 4.8;
+        public static final double kMaxAngularSpeed = (3 * Math.PI) / 2; // radians per second
 
         // Chassis configuration
         public static final double kTrackWidth = Units.inchesToMeters(22.5);
@@ -68,8 +68,8 @@ public final class Constants {
         public static final int gracePeriod = 3;
         public static final int voltage = 10;
         // Encoder values for macros
-        public static final int encoderL2 = 225;
-        public static final int encoderL3 = 360;
+        public static final int encoderL2 = 140;
+        public static final int encoderL3 = 205;
     }
 
     public static final class ConveyorConstants {

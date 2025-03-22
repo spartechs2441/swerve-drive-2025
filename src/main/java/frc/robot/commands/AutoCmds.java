@@ -22,9 +22,8 @@ public class AutoCmds {
                        new PathPlannerAuto(goingLeft ? "CursedLeft" : "CursedRight"),
                        new PathPlannerAuto("CursedForward"),
                     */
-                        new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL3, eleSub).withDeadline(new WaitCommand(5)),
-                        new FlywheelOutCmd(chuteSub).withDeadline(new WaitCommand(1)),
-                        new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL2, eleSub).withDeadline(new WaitCommand(5))
+                        new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL2, eleSub).withDeadline(new WaitCommand(5)),
+                        new FlywheelOutCmd(chuteSub).withDeadline(new WaitCommand(1))
                 );
 
     }

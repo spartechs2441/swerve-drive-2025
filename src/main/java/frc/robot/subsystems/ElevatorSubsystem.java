@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -53,7 +54,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             elevatorStop();
         }
-        System.out.println(elevatorEncoder.getPosition());
+        SmartDashboard.putNumber("ElevatorEncoder", elevatorEncoder.getPosition());
     }
 
     private void safeDown() {
@@ -63,7 +64,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             elevatorStop();
         }
-        System.out.println(elevatorEncoder.getPosition());
+        SmartDashboard.putNumber("ElevatorEncoder", elevatorEncoder.getPosition());
     }
 
     public RelativeEncoder getElevatorEncoder() {

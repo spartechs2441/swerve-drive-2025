@@ -4,12 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "Hacks",
-    "StartCageBBlu",
-    "StartCageBRed",
-    "StartCageRBlu",
-    "StartCageRRed",
-    "StartMBlu",
-    "StartMRed"
+    "StartCageB",
+    "StartCageR",
+    "StartM"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

@@ -17,6 +17,6 @@ public class AutoLimelightCmd extends Command {
 
     @Override
     public void execute() {
-        llSub.drive(0, driveSubsystem);
+        llSub.autonomous(driveSubsystem, 10);
     }
 }

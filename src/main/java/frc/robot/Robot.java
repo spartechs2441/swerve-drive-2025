@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         // TODO: Remove on prod
-        robotContainer.nyanCat();
+//        robotContainer.printDebug();
     }
 
     /**

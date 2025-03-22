@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class LimelightSubsystem extends SubsystemBase {
+    private final NetworkTableEntry txnc;
     NetworkTable llight;
     private final NetworkTableEntry tx;
     private final NetworkTableEntry ty;
@@ -22,6 +23,11 @@ public class LimelightSubsystem extends SubsystemBase {
         tx = llight.getEntry("tx"); //displacement on x axis
         ty = llight.getEntry("ty"); //displacement on y axis
         tv = llight.getEntry("tv"); //0 or 1 depending on if there is a reflective object
+        txnc = llight.getEntry("txnc"); // Angle on the april tag
+    }
+
+    public void printDebug() {
+        System.out.println(txnc.getDouble(0.0));
     }
 
     // simple proportional turning control with Limelight.
@@ -58,6 +64,17 @@ public class LimelightSubsystem extends SubsystemBase {
         targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
         targetingForwardSpeed *= -1.0;
         return targetingForwardSpeed;
+    }
+
+    private double limelightStrafeProportional(double target) {
+        final double aggressiveness = 0.01;
+        return (tx.getDouble(0.0) + target)
+                * aggressiveness;
+    }
+
+    public void autonomous(DriveSubsystem driveSub, double target) {
+        final double sidewaysMove = limelightStrafeProportional(target);
+        driveSub.drive(0, sidewaysMove, 0, false);
     }
 
 

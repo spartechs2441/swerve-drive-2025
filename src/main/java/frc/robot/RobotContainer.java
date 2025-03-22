@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -36,17 +37,21 @@ public class RobotContainer {
     private final ElevatorSubsystem eleSub;
     private final ConveyorSubsystem conveySub;
     private final IntakeSubsystem intakeSub;
-    private final LEDManager ledManager;
+//    private final LEDManager ledManager;
     private final SendableChooser<Command> autoChooser;
     // The driver's controller
     XboxController driverController;
     Joystick flightstickController;
 
+
+    public void printDebug() {
+        limelight.printDebug();
+    }
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        ledManager = null; // new LEDManager(new AddressableLED(Constants.LED.ledPort), Constants.LED.ledLength);
+//        ledManager = null; // new LEDManager(new AddressableLED(Constants.LED.ledPort), Constants.LED.ledLength);
         robotDrive = new DriveSubsystem();
         chuteSub = new ChuteSubsystem();
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -79,10 +84,11 @@ public class RobotContainer {
                         robotDrive));
 
         System.out.println("=== Chooser ===");
-//        AutoBuilder.buildAutoChooser();
-        this.autoChooser = new SendableChooser<Command>();
-        autoChooser.addOption("Epic auto", AutoCmds.reefScore("MoveTest", robotDrive, limelight, eleSub, chuteSub));
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        this.autoChooser = AutoBuilder.buildAutoChooser("MoveTest");
+        Commands.none();
+                // new SendableChooser<Command>();
+//        autoChooser.addOption("Epic auto", AutoCmds.reefScore("MoveTest", robotDrive, limelight, eleSub, chuteSub));
+        SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
     public double getGyro() {
@@ -197,7 +203,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return AutoCmds.reefScore("MoveTest", robotDrive, limelight, eleSub, chuteSub);
+        return AutoCmds.reefScore(autoChooser.getSelected(), true, robotDrive, limelight, eleSub, chuteSub);
 //        return autoChooser.getSelected().andThen(new Command() {
 //            @Override
 //            public void initialize() {

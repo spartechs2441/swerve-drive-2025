@@ -84,8 +84,7 @@ public class RobotContainer {
                         robotDrive));
 
         System.out.println("=== Chooser ===");
-        this.autoChooser = AutoBuilder.buildAutoChooser("MoveTest");
-        Commands.none();
+        this.autoChooser = AutoBuilder.buildAutoChooser("DefaultMove");
                 // new SendableChooser<Command>();
 //        autoChooser.addOption("Epic auto", AutoCmds.reefScore("MoveTest", robotDrive, limelight, eleSub, chuteSub));
         SmartDashboard.putData("AutoChooser", autoChooser);
@@ -203,7 +202,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return AutoCmds.reefScore(autoChooser.getSelected(), true, robotDrive, limelight, eleSub, chuteSub);
+        return AutoCmds.reefScore(autoChooser.getSelected(), robotDrive, limelight, eleSub, chuteSub);
 //        return autoChooser.getSelected().andThen(new Command() {
 //            @Override
 //            public void initialize() {

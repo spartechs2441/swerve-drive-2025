@@ -43,7 +43,7 @@ public class DriveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightChassisAngularOffset);
     // The gyro sensor
     private final Pigeon2 gyro = new Pigeon2(0);
-    private double tare = 45 + 180;
+    private double tare = 45;
     // Odometry class for tracking robot pose
     SwerveDriveOdometry odometry = new SwerveDriveOdometry(
             DriveConstants.kDriveKinematics,

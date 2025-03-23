@@ -115,10 +115,10 @@ public class RobotContainer {
         new JoystickButton(driverController, Constants.Controls.aprilTagTrack).onTrue(
                 new LimelightCmd(limelight, robotDrive, driverController)
         ).onFalse(new LimelightStopCmd(limelight));
-        new POVButton(driverController, Constants.Controls.hingeDown)
+        new JoystickButton(driverController, Constants.Controls.hingeDown)
                 .onTrue(new HingeDownCmd(intakeSub))
                 .onFalse(new HingeStopCmd(intakeSub));
-        new POVButton(driverController, Constants.Controls.hingeUp)
+        new JoystickButton(driverController, Constants.Controls.hingeUp)
                 .onTrue(new HingeUpCmd(intakeSub))
                 .onFalse(new HingeStopCmd(intakeSub));
 
@@ -144,12 +144,15 @@ public class RobotContainer {
         new JoystickButton(flightstickController, Constants.Controls.coralLoad)
                 .onTrue(new CoralLoadCmd(conveySub, chuteSub))
                 .onFalse(new CoralLoadStopCmd(conveySub, chuteSub));
+        // FIXME: Mechanical, Piston
         new JoystickButton(flightstickController, Constants.Controls.chuteIn).onTrue(
                 new PistonExtendCmd(chuteSub, eleSub)
         );
         new JoystickButton(flightstickController, Constants.Controls.chuteOut).onTrue(
                 new PistonRetractCmd(chuteSub)
         );
+
+
 //        new JoystickButton(flightstickController, Constants.Controls.conveyorIn)
 //                .onTrue(new ConveyorInCmd(conveySub))
 //                .onFalse(new ConveyorStopCmd(conveySub));

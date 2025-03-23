@@ -27,7 +27,7 @@ public final class Constants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
         public static final double kMaxSpeedMetersPerSecond = 3.6; // 4.8;
-        public static final double kMaxAngularSpeed = (3 * Math.PI) / 2; // radians per second
+        public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
         // Chassis configuration
         public static final double kTrackWidth = Units.inchesToMeters(22.5);
@@ -64,12 +64,12 @@ public final class Constants {
         public static final int canId = 12;
         public static final int limitSwitchDIo = 0;
         // Test this when changing the elevator
-        public static final int encoderLimit = 380; // 387;
+        public static final int encoderLimit = 210; // Set to be slightly lower than the ACTUAL height for safe measures
         public static final int gracePeriod = 3;
         public static final int voltage = 10;
         // Encoder values for macros
-        public static final int encoderL2 = 140;
-        public static final int encoderL3 = 205;
+        public static final int encoderL2 = 135; // L2 Height: 2 ft. 7 7/8 in.
+        public static final int encoderL3 = 200; // L3 Height: 3 ft.11 5/8 in.
     }
 
     public static final class ConveyorConstants {
@@ -87,7 +87,7 @@ public final class Constants {
 
     public static final class ChuteConstants {
         public static final int canId = 14;
-        public static final int voltage = 4;
+        public static final int flywheelVoltage = 4;
         /**
          * The elevator encoder value required for the piston to extend.
          * This is to prevent the piston from hitting the robot
@@ -141,8 +141,8 @@ public final class Constants {
     public static final class Controls {
         public static final int aprilTagTrack = XboxController.Button.kB.value;
         public static final int tareButton = XboxController.Button.kStart.value;
-        public static final int hingeUp = 0;
-        public static final int hingeDown = 180;
+        public static final int hingeUp = XboxController.Button.kY.value;
+        public static final int hingeDown = XboxController.Button.kA.value;
 
         public static final int macroDown = 2;
         public static final int coralLoad = 1;

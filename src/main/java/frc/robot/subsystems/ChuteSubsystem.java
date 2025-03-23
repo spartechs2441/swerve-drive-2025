@@ -37,11 +37,11 @@ public class ChuteSubsystem extends SubsystemBase {
     }
 
     public void flywheelIn() {
-        flywheel.setVoltage(Constants.ChuteConstants.voltage);
+        flywheel.setVoltage(Constants.ChuteConstants.flywheelVoltage);
     }
 
     public void flywheelOut() {
-        flywheel.setVoltage(-Constants.ChuteConstants.voltage);
+        flywheel.setVoltage(-Constants.ChuteConstants.flywheelVoltage);
     }
 
     public void flywheelStop() {

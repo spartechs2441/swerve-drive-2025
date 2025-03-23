@@ -9,6 +9,25 @@
           "data": {
             "pathName": "StartCageR6"
           }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorL2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FlywheelOut"
+          }
         }
       ]
     }

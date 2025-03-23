@@ -14,17 +14,18 @@ public class AutoCmds {
         // Pathplanner doesn't allow us to get the drive sub (I think) and so we need to do this terribleness
         // (because of the limelight correction that I now doubt we need)
         // It isn't *that* bad because we are really only using one type of auto: Move and score
+                    /*
         return path
                 .andThen(
-                    /*
                        new AutoLimelightCmd(driveSub, llSub).withDeadline(new WaitCommand(4)),
                        new AutoDriveStop(driveSub),
                        new PathPlannerAuto(goingLeft ? "CursedLeft" : "CursedRight"),
                        new PathPlannerAuto("CursedForward"),
-                    */
-                        new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL2, eleSub).withDeadline(new WaitCommand(5)),
-                        new FlywheelOutCmd(chuteSub).withDeadline(new WaitCommand(1))
+//                        new ElevatorMacroCmd(Constants.ElevatorConstants.encoderL2, eleSub).withDeadline(new WaitCommand(5)),
+//                        new FlywheelOutCmd(chuteSub).withDeadline(new WaitCommand(1))
                 );
+                    */
+        return path;
 
     }
 }

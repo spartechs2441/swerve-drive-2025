@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -37,7 +38,7 @@ public class RobotContainer {
     private final ElevatorSubsystem eleSub;
     private final ConveyorSubsystem conveySub;
     private final IntakeSubsystem intakeSub;
-//    private final LEDManager ledManager;
+    private final LEDManager ledManager;
     private final SendableChooser<Command> autoChooser;
     // The driver's controller
     XboxController driverController;
@@ -45,13 +46,13 @@ public class RobotContainer {
 
 
     public void printDebug() {
-        limelight.printDebug();
+        ledManager.setStatus(LEDStatus.RANDOM);
     }
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-//        ledManager = null; // new LEDManager(new AddressableLED(Constants.LED.ledPort), Constants.LED.ledLength);
+        ledManager = new LEDManager(new AddressableLED(Constants.LED.ledPort), Constants.LED.ledLength);
         robotDrive = new DriveSubsystem();
         chuteSub = new ChuteSubsystem();
         var networkTable = NetworkTableInstance.getDefault().getTable("limelight");

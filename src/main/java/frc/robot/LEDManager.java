@@ -68,8 +68,8 @@ public class LEDManager {
         this.length = length;
         this.status = LEDStatus.DEFAULT;
         this.queue = new ArrayDeque<>();
-        updateLEDs(LEDStatus.DEFAULT);
         led.setLength(length);
+        updateLEDs(LEDStatus.DEFAULT);
     }
 
     /**

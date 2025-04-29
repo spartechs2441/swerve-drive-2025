@@ -59,10 +59,19 @@ public class LimelightSubsystem extends SubsystemBase {
     // this works best if your Limelight's mount height and target mount height are different.
     // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
     double limelightRangeProportional() {
-        double kP = .1;
-        double targetingForwardSpeed = ta.getDouble(0.0) * kP;
-        targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
-        targetingForwardSpeed *= -1.0;
+        double kP = 0.1;
+        double maxArea = 1.8;
+        double ta = this.ta.getDouble(0.0);
+        double targetingForwardSpeed = (ta) * kP;
+        if (0 < ta && ta < maxArea) {
+            targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
+            targetingForwardSpeed *= -1.0;
+        } else if (ta > (maxArea + 0.2)) {
+            targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
+        } else {
+            targetingForwardSpeed = 0;
+        }
+        System.out.println(targetingForwardSpeed);
         return targetingForwardSpeed;
     }
 

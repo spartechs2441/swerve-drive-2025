@@ -62,15 +62,15 @@ public class LimelightSubsystem extends SubsystemBase {
         double kP = 0.1;
         double maxArea = 1.8;
         double ta = this.ta.getDouble(0.0);
-        double targetingForwardSpeed = (ta) * kP;
-        if (0 < ta && ta < maxArea) {
-            targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
-            targetingForwardSpeed *= -1.0;
-        } else if (ta > (maxArea + 0.2)) {
-            targetingForwardSpeed *= Constants.DriveConstants.kMaxSpeedMetersPerSecond;
-        } else {
-            targetingForwardSpeed = 0;
-        }
+        if (ta == 0) return 0;
+        double t = ta - maxArea;
+        double targetingForwardSpeed = Math.pow(t, 2) * kP;
+        targetingForwardSpeed = Math.max(
+                targetingForwardSpeed,
+                Constants.DriveConstants.kMaxSpeedMetersPerSecond
+        );
+        targetingForwardSpeed *= t < 0 ? -1 : 1;
+
         System.out.println(targetingForwardSpeed);
         return targetingForwardSpeed;
     }

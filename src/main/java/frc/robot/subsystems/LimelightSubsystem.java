@@ -12,10 +12,6 @@ public class LimelightSubsystem extends SubsystemBase {
     private final NetworkTableEntry ty;
     private final NetworkTableEntry ta;
     private final NetworkTableEntry tv;
-    private double x;
-    private double y;
-    private double area;
-    private Long isSomething;
 
     public LimelightSubsystem(NetworkTable limeLight) {
         llight = limeLight;
@@ -62,6 +58,7 @@ public class LimelightSubsystem extends SubsystemBase {
         double kP = 0.1;
         double maxArea = 1.8;
         double ta = this.ta.getDouble(0.0);
+        // TODO: Make the parabola more flat
         if (ta == 0) return 0;
         double t = ta - maxArea;
         double targetingForwardSpeed = Math.pow(t, 2) * kP;
@@ -86,6 +83,26 @@ public class LimelightSubsystem extends SubsystemBase {
         driveSub.drive(0, sidewaysMove, 0, false);
     }
 
+    public void driveOld(DriveSubsystem robotDrive) {
+        var area = ta.getDouble(0.0);
+        var x = tx.getDouble(0.0);
+        var y = ty.getDouble(0.0);
+        var isSomething = tv.getDouble(0.0);
+        //CHECK IF SOMETHING'S HERE THEN TURN TOWARD IT
+        if (isSomething == 1) {
+            final double dist = 1f;
+            final double rotationSpeed = -(x * (1.0 / 40)) * 0.3;
+            if (area < dist) {
+                final double forwardSpeed = (Math.sqrt(3) - Math.sqrt(area)) / 2;
+                robotDrive.drive(-forwardSpeed, 0, rotationSpeed, false);
+            } else if (area >= dist) {
+                final double backwardSpeed = (1 - Math.cbrt(area));
+                robotDrive.drive(-backwardSpeed, 0, rotationSpeed, false);
+            }
+        } else {
+            robotDrive.drive(0, 0, 0, false);
+        }
+    }
 
     public void drive(double rawAxis, DriveSubsystem robotDrive) {
         final double rot_limelight = limelightAimProportional();
